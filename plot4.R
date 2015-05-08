@@ -1,14 +1,19 @@
 library(sqldf)
+
+## Read raw data
 mydata<-read.table("household_power_consumption.txt",header=T,sep=";",
                    stringsAsFactor=F,na.strings="?")
 
+## Subset the data
 data<-sqldf("select * from mydata where Date='1/2/2007' or Date='2/2/2007'")
 
+## Set system time in English
 Sys.setlocale("LC_TIME","English")
 data$Date<-as.Date(data$Date,format="%d/%m/%Y")
 DateTime<-strptime(paste(data$Date,data$Time),format="%Y-%m-%d %H:%M:%S")
 data$DateTime<-as.POSIXct(DateTime)
 
+## Plot4
 png(file="plot4.png",width=480,height=480)
 par(mfrow=c(2,2),mar=c(5,4,2,1),oma=c(0,0,2,0))
 with(data,{
